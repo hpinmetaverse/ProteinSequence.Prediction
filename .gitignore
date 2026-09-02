@@ -1,0 +1,56 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# Environment
+.venv/
+venv/
+env/
+*.env
+.python-version
+
+# Data files (too large for git)
+/data/
+/data_raw/
+*.zip
+*.npy
+*.npz
+*.h5
+*.hdf5
+
+# Model checkpoints (too large for git)
+/checkpoints/
+*.pt
+*.pth
+*.ckpt
+
+# Logs and outputs
+/logs/
+*.log
+*.json
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+.AppleDouble
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
