@@ -1,0 +1,49 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# 2-Layer Stacked Bi-LSTM — Hyperparameter Configuration
+# ──────────────────────────────────────────────────────────────────────────────
+# Usage: configs/bi_lstm_config.yaml
+# Loaded by: scripts/train.py --model bi_lstm --config configs/bi_lstm_config.yaml
+
+model:
+  name: "BiLSTM"
+  input_dim: 42               # 21 one-hot amino acids + 21 PSSM columns
+  embed_dim: 128              # Linear projection dimension before LSTM layers
+  hidden_dim: 256             # LSTM hidden units per direction (total per layer = 512)
+  num_layers: 2               # Stacked bidirectional LSTM layers
+  num_q8_classes: 8           # Q8 secondary structure classes
+  num_q3_classes: 3           # Q3 secondary structure classes (auxiliary head)
+  dropout: 0.3                # Dropout after embedding and between LSTM layers
+  bidirectional: true         # Process both N→C and C→N directions
+  use_auxiliary_q3_head: true # Enable separate Q3 output head for joint training
+
+training:
+  learning_rate: 0.001        # Adam initial learning rate
+  weight_decay: 0.00001       # L2 regularization (Adam weight_decay)
+  max_epochs: 50              # Maximum number of training epochs
+  batch_size: 32              # Proteins per batch
+  grad_clip_max_norm: 1.0     # Gradient clipping max L2 norm
+  early_stopping_patience: 10 # Stop if val Q3 doesn't improve for N epochs
+
+  lr_scheduler:
+    type: "ReduceLROnPlateau"
+    mode: "max"               # Maximize validation Q3 accuracy
+    factor: 0.5               # Multiply LR by this on plateau
+    patience: 3               # Wait N epochs before reducing LR
+
+  loss:
+    q8_loss_weight: 1.0       # Weight for primary Q8 CrossEntropy loss
+    q3_loss_weight: 0.3       # Weight for auxiliary Q3 CrossEntropy loss
+    label_pad_value: -1       # CrossEntropyLoss ignore_index for padded positions
+
+data:
+  train_path: "data/cullpdb_pc25_ref2016.npy"
+  test_path: "data/cb513.npy"
+  train_fraction: 0.8         # 80% train, 20% validation from CullPDB
+  seed: 42                    # Random seed for reproducible train/val split
+  num_workers: 4              # DataLoader worker processes
+  pin_memory: true            # Pin memory for faster GPU transfer
+
+checkpointing:
+  checkpoint_dir: "checkpoints"
+  log_dir: "logs"
+  save_best_only: true        # Save only when validation Q3 improves
