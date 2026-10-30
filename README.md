@@ -14,7 +14,7 @@ major 1/
 ├── docs/
 │   ├── PRD.md            # Product Requirements Document
 │   ├── ARCHITECTURE.md   # System architecture & model design
-│   ├── PHASES.md         # 8-week development plan
+│   ├── PHASES.md         # Weekwise development plan
 │   └── RULES.md          # Engineering & coding standards
 ├── src/
 │   ├── models/
@@ -115,8 +115,7 @@ containing 256 proteins:
 | BiLSTM | 72.35% | 60.07% |
 
 The BiLSTM improves over the Bi-RNN by 4.34 percentage points on Q3 and 3.29
-percentage points on Q8. See [explanation.md](explanation.md) for the design
-decisions, training rationale, evaluation method, and limitations.
+percentage points on Q8.
 
 ---
 
